@@ -21,25 +21,26 @@ var allCache = (function() {
 // Caches a client-supplied number of results
 var someCache = function makeSomeHash(count) {
 	var hashCache = {
-		size: 0,
 		last: [],
 	};
 	var shrinkToSize = function() {
-		while (hashCache.size > count) {
+		while (hashCache.last.length > count) {
 			delete hashCache[hashCache.last.shift()];
 		}
 	};
-	return function sha1(data) {
+	var sha1 = function sha1(data) {
 		var hash = hashCache[data];
 		if (hash) {
 			return hash;
 		}
 		hashCache[data] = hash = noCache(data);
 		hashCache.last.push(data);
-		hashCache.size = hashCache.size + 1;
 		shrinkToSize();
 		return hash;
 	};
+
+	sha1.cache = hashCache;
+	return sha1;
 };
 
 module.exports = function sha1_init(cacheSize) {
