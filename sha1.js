@@ -11,7 +11,11 @@ var allCache = (function() {
 	// Cache of hashed emails in a local scope.
 	var hashCache = {};
 	return function sha1(data) {
-		return hashCache[data] || hashCache[data] = noCache(data);
+		var hash = hashCache[data];
+		if (hash) {
+			return hash;
+		}
+		return hashCache[data] = noCache(data);
 	};
 }());
 // Caches a client-supplied number of results
@@ -38,7 +42,7 @@ var someCache = function makeSomeHash(count) {
 	};
 };
 
-exports = function sha1_init(cacheSize) {
+module.exports = function sha1_init(cacheSize) {
 	switch(cacheSize) {
 		case 0:
 			return noCache;
