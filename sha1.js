@@ -28,7 +28,7 @@ var someCache = function makeSomeHash(count) {
 			delete hashCache[hashCache.last.shift()];
 		}
 	};
-	var sha1 = function sha1(data) {
+	return function sha1(data) {
 		var hash = hashCache[data];
 		if (hash) {
 			return hash;
@@ -38,9 +38,6 @@ var someCache = function makeSomeHash(count) {
 		shrinkToSize();
 		return hash;
 	};
-
-	sha1.cache = hashCache;
-	return sha1;
 };
 
 module.exports = function sha1_init(cacheSize) {
